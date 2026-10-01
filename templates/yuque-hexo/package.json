@@ -1,0 +1,36 @@
+{
+  "name": "yuque-hexo",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "sync": "elog sync -c elog.config.ts",
+    "sync:local": "elog sync -c elog.config.ts -e .env",
+    "dev": "hexo server",
+    "build": "hexo clean && hexo generate",
+    "preview": "hexo server"
+  },
+  "dependencies": {
+    "@elog/cli": "1.0.0-beta.5",
+    "@elog/plugin-sdk": "1.0.0-beta.2",
+    "@elog/plugin-to-local": "1.0.0-beta.5",
+    "@elog/plugin-transform-image-local": "1.0.0-beta.5",
+    "@elog/plugin-from-yuque-pwd": "1.0.0-beta.5",
+    "hexo": "8.1.2",
+    "hexo-cli": "4.3.2",
+    "hexo-theme-butterfly": "5.7.0",
+    "hexo-renderer-marked": "7.0.1",
+    "hexo-renderer-pug": "3.0.0",
+    "hexo-renderer-stylus": "3.0.1",
+    "hexo-server": "3.0.0",
+    "hexo-generator-index": "4.0.0",
+    "hexo-generator-archive": "2.0.0",
+    "hexo-generator-category": "2.0.0",
+    "hexo-generator-tag": "2.0.0"
+  },
+  "hexo": {
+    "version": "8.1.2"
+  }
+}

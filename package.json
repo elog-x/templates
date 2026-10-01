@@ -1,0 +1,8 @@
+{
+  "name": "elog-templates",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check-catalog.mjs"
+  }
+}

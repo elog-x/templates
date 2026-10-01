@@ -1,0 +1,73 @@
+name: Sync content
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [deploy]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: elog-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Record content revision
+        id: before
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache/restore@v4
+        with:
+          path: elog.cache.json
+          key: elog-1x-feishu-space-vitepress-${{ steps.before.outputs.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            elog-1x-feishu-space-vitepress-${{ steps.before.outputs.sha }}-
+      - name: Sync writing platform
+        run: npm run sync
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_SPACE_FOLDER_TOKEN: ${{ secrets.FEISHU_SPACE_FOLDER_TOKEN }}
+      - name: Build website
+        run: npm run build
+      - name: Commit content
+        id: commit
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- docs/articles docs/public/images
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: sync content with Elog"
+            git push origin "HEAD:$DEFAULT_BRANCH"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache/save@v4
+        with:
+          path: elog.cache.json
+          key: elog-1x-feishu-space-vitepress-${{ steps.commit.outputs.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Trigger Vercel deployment
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            curl --fail --silent --show-error --output /dev/null --request POST "$VERCEL_DEPLOY_HOOK"
+          fi

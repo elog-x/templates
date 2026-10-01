@@ -1,0 +1,54 @@
+name: Check templates
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm run check
+
+  templates:
+    needs: catalog
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+        template:
+          - notion-hexo
+          - notion-vitepress
+          - notion-astro
+          - yuque-hexo
+          - yuque-vitepress
+          - yuque-astro
+          - feishu-space-hexo
+          - feishu-space-vitepress
+          - feishu-space-astro
+          - feishu-wiki-hexo
+          - feishu-wiki-vitepress
+          - feishu-wiki-astro
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: templates/${{ matrix.template }}/package-lock.json
+      - name: Extract standalone project
+        run: node scripts/create.mjs '${{ matrix.template }}' '${{ runner.temp }}/elog-project'
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/elog-project
+        run: npm ci
+      - name: Verify offline sync and site build
+        run: node scripts/verify-template.mjs '${{ matrix.template }}' '${{ runner.temp }}/elog-project'

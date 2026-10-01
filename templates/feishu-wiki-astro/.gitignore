@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.elog.example
+elog.cache*.json
+*.log
+.DS_Store
+.idea/
+.vscode/
+dist/
+.astro/
+public/pagefind/

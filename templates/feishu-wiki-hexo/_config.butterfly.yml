@@ -1,0 +1,19 @@
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+  关于: /about/ || fas fa-user
+avatar:
+  img: /images/avatar.svg
+  effect: false
+cover:
+  index_enable: true
+  aside_enable: true
+  archives_enable: true
+  default_cover:
+    - /images/welcome.svg
+footer:
+  owner:
+    enable: true
+    since: 2026

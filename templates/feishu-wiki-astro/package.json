@@ -1,0 +1,48 @@
+{
+  "name": "feishu-wiki-astro",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "sync": "elog sync -c elog.config.ts",
+    "sync:local": "elog sync -c elog.config.ts -e .env",
+    "dev": "astro dev",
+    "build": "astro check && astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@elog/cli": "1.0.0-beta.5",
+    "@elog/plugin-sdk": "1.0.0-beta.2",
+    "@elog/plugin-to-local": "1.0.0-beta.5",
+    "@elog/plugin-transform-image-local": "1.0.0-beta.5",
+    "@elog/plugin-from-feishu-wiki": "1.0.0-beta.5",
+    "@astrojs/mdx": "6.0.3",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "6.4.8",
+    "dayjs": "1.11.23",
+    "lodash.kebabcase": "4.1.1",
+    "rehype-callouts": "2.2.0",
+    "remark-collapse": "0.1.2",
+    "remark-toc": "9.0.0",
+    "slugify": "1.6.9",
+    "tailwindcss": "4.3.3",
+    "@fontsource/google-sans-code": "5.3.1",
+    "vite": "7.3.6"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@astrojs/markdown-remark": "7.3.1",
+    "@pagefind/default-ui": "1.5.2",
+    "@shikijs/transformers": "4.5.0",
+    "@tailwindcss/typography": "0.5.20",
+    "@types/lodash.kebabcase": "4.1.9",
+    "pagefind": "1.5.2",
+    "typescript": "6.0.3"
+  }
+}

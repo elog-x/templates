@@ -1,0 +1,26 @@
+{
+  "name": "yuque-vitepress",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "sync": "elog sync -c elog.config.ts",
+    "sync:local": "elog sync -c elog.config.ts -e .env",
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "@elog/cli": "1.0.0-beta.5",
+    "@elog/plugin-from-yuque-pwd": "1.0.0-beta.5",
+    "@elog/plugin-sdk": "1.0.0-beta.2",
+    "@elog/plugin-to-local": "1.0.0-beta.5",
+    "@elog/plugin-transform-image-local": "1.0.0-beta.5",
+    "gray-matter": "4.0.3",
+    "vitepress": "1.6.4",
+    "vue": "3.5.43"
+  },
+  "type": "module"
+}
